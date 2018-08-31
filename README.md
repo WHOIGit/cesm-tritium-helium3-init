@@ -1,5 +1,6 @@
-# tr3he_init
+# cesm-tritium-helim3-init
 
-## Python code to create initialization files for CESM tritium-helium3 module [tr3he](https://github.com/idlima/tr3he.git).
+## Python code to create initialization files for CESM tritium-helium3 module
+[cesm-tritium-helium3](https://github.com/idlima/cesm-tritium-helium3.git).
 
-Ivan Lima - Thu, 15 Dec 2016 08:36:14 -0500
+Ivan Lima - Fri Aug 31 2018 16:39:23 -0400
