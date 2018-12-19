@@ -1,1 +1,1 @@
-/home/ivan/Data/Tritium-3H/tr3he.py
+/home/ivan/Projects/Tritium-3H/tr3he.py

@@ -81,7 +81,7 @@ program tritium_dep_test
             iday_of_year = 1,  &
             days_in_year = 365
 
-    real (r8) :: frac_day = 0.0_r8
+    real (r8) :: frac_day = 0.5_r8
 
     ! integer (int_kind), dimension(:), allocatable :: &
     !         data_ind
@@ -111,7 +111,7 @@ contains
 
         tritium_dep_file = 'tritium_dep_gnip.txt' ! file name for tritium deposition data
         model_year       = 1
-        data_year        = 1950
+        data_year        = 1960
 
     end subroutine tr3he_init
 
@@ -219,8 +219,9 @@ contains
                 i, j              ! loop indices
 
         real (r8) :: &
-                mapped_date,    & ! date of current model timestep mapped to data timeline
-                weight            ! weighting for temporal interpolation
+                mapped_date,      & ! date of current model timestep mapped to data timeline
+                mapped_date_m5y,  & ! date of current model timestep minus 5 years mapped to data timeline
+                weight              ! weighting for temporal interpolation
 
         real (r8), dimension(nlat) :: gnip_tritium_curr ! tritium concentration for current time step
 
@@ -230,19 +231,21 @@ contains
         !  on the first time step.
         !-----------------------------------------------------------------------
 
-        mapped_date = iyear + 0.45 + (iday_of_year-1+frac_day)/days_in_year &
-                - model_year + data_year
+        mapped_date = iyear + 0.3245 + (iday_of_year-1+frac_day)/days_in_year &
+                - model_year + data_year - 5
+
+        !mapped_date_m5y = mapped_date - 5 ! date 5 years before
 
         ! if (mapped_date >= gnip_date(gnip_data_len) + max_gnip_extension) &
-        !         print *, 'exit_POP(sigAbort, model date maps too far beyond pcfc_date(end))'
+        !         print *, 'exit_POP(sigAbort, model date maps too far beyond gnip_date(end))'
 
         !-----------------------------------------------------------------------
         ! Set tritium concentrations before GNIP record
         !-----------------------------------------------------------------------
 
         if (mapped_date < gnip_date(1)) then
-            data_ind = 1
             gnip_tritium_curr = gnip_tritium(:,1)
+            data_ind = 1
             return
         endif
 
@@ -283,7 +286,7 @@ contains
         endif
 
         ! print *, gnip_data_len, data_ind
-        print '(2f8.2)', mapped_date, gnip_date(data_ind)
+        print '(3f9.3)', mapped_date + 5, mapped_date, gnip_date(data_ind)
         print '(17f9.3)', gnip_tritium(:,data_ind)
         print '(17f9.3)', gnip_tritium_curr
 
